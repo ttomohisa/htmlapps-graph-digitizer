@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "Graph Digitizer",
+  "nameJa": "Graph Digitizer",
+  "slug": "graph-digitizer",
+  "version": "1.0.0",
+  "description": "Extract, review, and repair XY data from graph images or PDF pages with local processing, accessible controls, robust input handling, auto-tracing, projects, and CSV export.",
+  "descriptionJa": "グラフ画像やPDFページからXYデータを抽出・確認・修正。異常入力や大画像への案内、キーボード／読み上げ配慮を含め、完全ローカルで作業保存とCSV出力まで行えます。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-graph-digitizer"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}

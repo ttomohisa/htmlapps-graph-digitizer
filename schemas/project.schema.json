@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-kitty.com/schemas/graph-digitizer-project-v1.schema.json",
+  "title": "Graph Digitizer portable project file",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "appVersion",
+    "savedAt",
+    "workingImage",
+    "calibration",
+    "values",
+    "scales",
+    "series",
+    "activeSeriesId",
+    "seriesSequence",
+    "points",
+    "idSequence",
+    "trace",
+    "export"
+  ],
+  "properties": {
+    "format": {
+      "const": "browser-kitty.graph-digitizer"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "appVersion": {
+      "type": "string",
+      "maxLength": 32
+    },
+    "savedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "workingImage": {
+      "type": "object",
+      "required": [
+        "name",
+        "mime",
+        "width",
+        "height",
+        "data"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "mime": {
+          "const": "image/png"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "data": {
+          "type": "string",
+          "pattern": "^data:image/png;base64,"
+        }
+      },
+      "additionalProperties": false
+    },
+    "calibration": {
+      "type": "object",
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/calibrationAxis"
+        },
+        "y": {
+          "$ref": "#/$defs/calibrationAxis"
+        }
+      },
+      "additionalProperties": false
+    },
+    "values": {
+      "type": "object",
+      "required": [
+        "x1",
+        "x2",
+        "y1",
+        "y2"
+      ],
+      "properties": {
+        "x1": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "x2": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "y1": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "y2": {
+          "type": "string",
+          "maxLength": 80
+        }
+      },
+      "additionalProperties": false
+    },
+    "scales": {
+      "type": "object",
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "enum": [
+            "linear",
+            "log10"
+          ]
+        },
+        "y": {
+          "enum": [
+            "linear",
+            "log10"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "series": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "$ref": "#/$defs/series"
+      }
+    },
+    "activeSeriesId": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "seriesSequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "points": {
+      "type": "array",
+      "maxItems": 500000,
+      "items": {
+        "$ref": "#/$defs/extractedPoint"
+      }
+    },
+    "idSequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "trace": {
+      "$ref": "#/$defs/trace"
+    },
+    "export": {
+      "type": "object",
+      "required": [
+        "csvBase",
+        "csvFormat"
+      ],
+      "properties": {
+        "csvBase": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "csvFormat": {
+          "enum": [
+            "standard",
+            "simple"
+          ]
+        },
+        "csvTarget": {
+          "type": "string",
+          "maxLength": 80
+        }
+      },
+      "additionalProperties": false
+    },
+    "workflowStep": {
+      "enum": [
+        "image",
+        "axis",
+        "extract",
+        "results"
+      ]
+    }
+  },
+  "$defs": {
+    "imagePoint": {
+      "type": "object",
+      "required": [
+        "px",
+        "py"
+      ],
+      "properties": {
+        "px": {
+          "type": "number"
+        },
+        "py": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "calibrationAxis": {
+      "type": "object",
+      "required": [
+        "p1",
+        "p2"
+      ],
+      "properties": {
+        "p1": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/imagePoint"
+            }
+          ]
+        },
+        "p2": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/imagePoint"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "series": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "color",
+        "visible"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "visible": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "extractedPoint": {
+      "type": "object",
+      "required": [
+        "px",
+        "py",
+        "id",
+        "seriesId",
+        "segmentId",
+        "source",
+        "needsReview"
+      ],
+      "properties": {
+        "px": {
+          "type": "number"
+        },
+        "py": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "seriesId": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "segmentId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "needsReview": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "required": [
+        "color",
+        "colorPicked",
+        "range",
+        "start",
+        "tolerance",
+        "maxJump",
+        "step",
+        "maxGap"
+      ],
+      "properties": {
+        "color": {
+          "type": "object",
+          "required": [
+            "r",
+            "g",
+            "b"
+          ],
+          "properties": {
+            "r": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "g": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            },
+            "b": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255
+            }
+          },
+          "additionalProperties": false
+        },
+        "colorPicked": {
+          "type": "boolean"
+        },
+        "range": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "x",
+                "y",
+                "w",
+                "h",
+                "kind"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "w": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "h": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "kind": {
+                  "enum": [
+                    "axis",
+                    "custom"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/imagePoint"
+            }
+          ]
+        },
+        "tolerance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 442
+        },
+        "maxJump": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "step": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxGap": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "mode": {
+          "enum": [
+            "curve",
+            "marker"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": true
+}
