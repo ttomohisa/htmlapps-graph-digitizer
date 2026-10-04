@@ -47,6 +47,10 @@ jobs:
         shell: pwsh
         run: node tests/test-v020-core.mjs
 
+      - name: Graph Digitizer spreadsheet clipboard regression
+        shell: pwsh
+        run: node tests/test-spreadsheet-copy.mjs
+
       - name: Graph Digitizer standalone and template invariant tests
         shell: pwsh
         run: node tests/test-standalone.mjs

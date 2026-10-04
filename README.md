@@ -54,6 +54,12 @@ The standalone build uses Windows PowerShell and the built-in `tar.exe`. Node.js
 7. Save a `.graphdigitizer.json` project whenever you want to resume later. Project files are validated before they replace current work.
 8. In **Results**, inspect review-needed points and segment boundaries, repair them if necessary, choose the target series/CSV format, check the CSV preview, and save the CSV.
 
+### Paste into a spreadsheet
+
+In Results, choose the series and format, then click **Copy for spreadsheet** and paste into Excel or Google Sheets. The TSV includes every row in the same order as CSV, with four standard columns or two simple columns. Hidden series remain included when selected. If automatic copy fails (including local-file browser restrictions), a separate full-text field opens and selects all rows for manual copying.
+
+Tabs, line breaks, and control characters inside series names become spaces. Names beginning with `=`, `+`, `-`, `@`, or a quote (after whitespace) receive an apostrophe prefix to keep them as text. Other names and internal quotes are preserved; numeric negatives and scientific notation are not prefixed. Some spreadsheet paste modes display the apostrophe, and number recognition depends on locale. Check the pasted columns/values. CSV and original names are unchanged; this normalization is specific to spreadsheet copying.
+
 ### Auto-trace modes
 
 - **Curve** — Samples a colored curve across X. It is intended for ordinary line plots where each X position has approximately one Y value.
@@ -129,6 +135,7 @@ node tests/test-v030-core.mjs
 node tests/test-v040-core.mjs
 node tests/test-v060-core.mjs
 node tests/test-v070-core.mjs
+node tests/test-spreadsheet-copy.mjs
 node tests/test-standalone.mjs
 ```
 
