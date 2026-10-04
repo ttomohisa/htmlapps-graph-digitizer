@@ -54,3 +54,7 @@ Before adding or upgrading a package:
 - Refresh the selected lock entry with the dependency scripts; never hand-edit a lock hash to bypass a mismatch.
 - Rebuild with a clean cache.
 - Test with the network disabled.
+
+## Spreadsheet clipboard output
+
+Spreadsheet copying is user-initiated and stays on the device clipboard; it does not contact a spreadsheet service. TSV text cells flatten control characters and prefix formula-like/quote-leading series names with an apostrophe. Numeric coordinate cells are not prefixed. This is a paste-time mitigation, not a guarantee across every spreadsheet import setting or subsequent edit. Some targets display the apostrophe. Existing CSV retains original names and RFC 4180 quoting, which alone does not neutralize spreadsheet formulas; treat CSV from untrusted project names accordingly.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added a separate Japanese/English “Copy for spreadsheet” action using selected-series/format TSV, without changing CSV or project files.
+- Spreadsheet-only text-cell normalization prevents tab/newline row splitting and protects formula-like or quote-leading series names; numeric values remain untouched.
+- Clipboard rejection or absence opens a selectable full-text fallback, including data beyond the truncated CSV preview; stale asynchronous results are ignored.
+
+
 Changes to Graph Digitizer follow [Semantic Versioning](https://semver.org/).
 
 ## 1.0.0 - 2026-09-26

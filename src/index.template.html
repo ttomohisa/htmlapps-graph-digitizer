@@ -860,6 +860,9 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
               <div class="csv-review-grid"><div class="field" style="margin:0"><label for="csvSeriesTarget" data-i18n="csvSeriesTargetLabel">保存する系列</label><select id="csvSeriesTarget" class="filename-input" style="border:1px solid var(--line);border-radius:9px;background:var(--surface)"><option value="all" data-i18n="csvSeriesAll">すべての系列</option></select></div><div class="field" style="margin:0"><label for="csvFormat" data-i18n="csvFormatLabel">CSVの形式</label><select id="csvFormat" class="filename-input" style="border:1px solid var(--line);border-radius:9px;background:var(--surface)"><option value="standard" data-i18n="csvStandard">標準：系列・区間・X・Y</option><option value="simple" data-i18n="csvSimple">簡易：X・Y</option></select></div></div>
               <div class="field field-output"><label for="outputFilename" data-i18n="outputFilename">出力ファイル名</label><div class="filename-control"><input id="outputFilename" class="filename-input" type="text" maxlength="120" value="graph-data" autocomplete="off" spellcheck="false" aria-describedby="csvHint"><span class="filename-extension">.csv</span></div><span class="field-note" id="csvHint" data-i18n="csvHint">UTF-8 BOM付き／系列ごとにX昇順</span></div>
               <details class="compact-details" id="csvPreviewDetails"><summary data-i18n="csvPreviewSummary">CSVの内容を確認</summary><div class="compact-details-body"><div class="csv-preview-meta" id="csvPreviewMeta"></div><textarea class="csv-preview" id="csvPreview" readonly spellcheck="false" aria-label="CSV preview"></textarea><div class="button-cluster"><button class="button" type="button" id="copyCsvButton" data-i18n="copyCsv" disabled>CSVをコピー</button><button class="button" type="button" id="selectCsvButton" data-i18n="selectCsv" disabled>プレビューを選択</button></div></div></details>
+              <div class="csv-review-actions"><button class="button" type="button" id="copySpreadsheetButton" data-i18n="copySpreadsheet" aria-describedby="spreadsheetHint" disabled>表計算用にコピー</button></div>
+              <p class="hint" id="spreadsheetHint" data-i18n="spreadsheetHint">選択中の系列・形式をタブ区切りでコピーし、ExcelやGoogle Sheetsへ貼り付けます。</p>
+              <details class="compact-details" id="spreadsheetFallback" hidden><summary data-i18n="spreadsheetFallbackTitle">表計算用テキスト（全行）</summary><div class="compact-details-body"><label for="spreadsheetText" data-i18n="spreadsheetCopyFailed">自動コピーできませんでした。選択済みの全行を手動でコピーしてください。</label><textarea class="csv-preview" id="spreadsheetText" readonly spellcheck="false"></textarea><button class="button" type="button" id="selectSpreadsheetButton" data-i18n="selectSpreadsheet">全行を選択</button></div></details>
               <div class="results-footer-actions"><button class="button primary" type="button" id="downloadButton" data-i18n="download" disabled>CSVを保存</button><div class="results-secondary-actions"><button class="button" type="button" id="projectSaveResultButton" data-i18n="saveProject" disabled>作業ファイルを保存</button><button class="button" type="button" id="backExtractButton" data-i18n="backExtract">抽出に戻る</button></div></div>
             </section>
           </section>
@@ -938,6 +941,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
 
       <h3 data-i18n="helpNotesTitle">注意事項</h3>
       <ul>
+        <li data-i18n="helpSpreadsheet"></li>
         <li data-i18n="helpNoteStorage">作業は自動保存されません。ページを閉じる前にCSVを保存してください。</li>
         <li data-i18n="helpNoteBrowser">この版では水平X軸・垂直Y軸の線形グラフに対応します。</li>
         <li data-i18n="helpNoteTemplate">抽出数値は画像からの推定で、測定精度は保証できません。</li>
@@ -1236,6 +1240,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           points:'抽出点',series:'系列',reviewCountLabel:'要確認',segmentCountLabel:'区間',segmentShort:'区間',pointStatus:'状態',pointStatusReview:'要確認',pointStatusReady:'確認済み',outputFilename:'出力ファイル名',csvHint:'UTF-8 BOM付き／系列・区間・X・Y列／系列ごとにX昇順',csvStandardNote:'UTF-8 BOM付き／系列・区間・X・Y列／系列ごとにX昇順',csvSimpleNote:'UTF-8 BOM付き／X・Y列／X昇順',
           reviewTitle:'確認・修正',reviewLead:'要確認点や区間の切れ目を確認し、選択した点を画像・グラフ・表で連動表示します。',reviewEmpty:'自動追跡で要確認になった点はありません。区間の切れ目がある場合は一覧に表示します。',reviewClear:'要確認なし',reviewSummary:'要確認 {points}点',reviewPointLabel:'要確認点',reviewGapLabel:'区間の切れ目',reviewNext:'要確認を先に見る',reviewMark:'確認済みにする',reviewEdit:'画像で修正',reviewMarked:'選択した点を確認済みにしました。',segmentSplit:'ここで区間を分割',segmentMerge:'前の区間と結合',segmentSplitDone:'選択した点の手前で区間を分割しました。',segmentMergeDone:'選択した区間を前の区間と結合しました。',segmentSplitUnavailable:'区間の最初の点では分割できません。',segmentMergeUnavailable:'この区間より前に結合できる区間がありません。',
           csvPreviewTitle:'CSVプレビュー',csvPreviewLead:'保存対象と形式を選び、内容を確認してから保存できます。',csvSeriesTargetLabel:'保存する系列',csvSeriesAll:'すべての系列',csvPreviewMeta:'{points}点 · {series}系列 · {segments}区間 · {filename}',csvPreviewTruncated:'先頭{shown}行を表示（全{total}行）',copyCsv:'CSVをコピー',selectCsv:'プレビューを選択',csvCopied:'CSVをクリップボードにコピーしました。',csvCopyFailed:'自動コピーできませんでした。プレビューを選択してコピーしてください。',
+          copySpreadsheet:'表計算用にコピー',spreadsheetHint:'選択中の系列・形式をタブ区切りでコピーし、ExcelやGoogle Sheetsへ貼り付けます。',spreadsheetCopied:'表計算用の全行をコピーしました。',spreadsheetCopyFailed:'自動コピーできませんでした。選択済みの全行を手動でコピーしてください。',spreadsheetFallbackTitle:'表計算用テキスト（全行）',selectSpreadsheet:'全行を選択',helpSpreadsheet:'「表計算用にコピー」は選択中の系列・形式・行順で全行をタブ区切りにします。系列名の改行・タブ・制御文字は空白に、数式や引用符で始まる名前は先頭にアポストロフィを付けます。貼付先によってはアポストロフィが表示され、数値解釈も地域設定に依存します。元の系列名・CSVは変更しません。コピー不可なら表示された全行を手動コピーできます。',
           download:'CSVを保存',backExtract:'抽出に戻る',
           helpTitle:'使い方と注意事項',close:'閉じる',helpBasicsTitle:'基本操作',
           helpStep1:'画像またはPDFを追加します。PDFはページを選んで必要な範囲を作業画像として切り出せます。',
@@ -1324,6 +1329,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           points:'Points',series:'Series',reviewCountLabel:'To review',segmentCountLabel:'Segments',segmentShort:'Segment',pointStatus:'Status',pointStatusReview:'Review',pointStatusReady:'Checked',outputFilename:'Output filename',csvHint:'UTF-8 with BOM / columns based on format / sorted by series then X',csvStandardNote:'UTF-8 BOM / series, segment, x, y / X order per series',csvSimpleNote:'UTF-8 BOM / x, y / X ascending',
           reviewTitle:'Review and repair',reviewLead:'Review flagged points and segment gaps. A selected point stays linked across the image, chart, and table.',reviewEmpty:'No auto-traced points are flagged. Segment boundaries are still listed when present.',reviewClear:'No flagged points',reviewSummary:'{points} flagged',reviewPointLabel:'Flagged point',reviewGapLabel:'Segment gap',reviewNext:'Review flagged points first',reviewMark:'Mark as checked',reviewEdit:'Edit on image',reviewMarked:'Marked the selected point as checked.',segmentSplit:'Split segment here',segmentMerge:'Merge with previous segment',segmentSplitDone:'Split the segment before the selected point.',segmentMergeDone:'Merged the selected segment with the previous one.',segmentSplitUnavailable:'You cannot split at the first point of a segment.',segmentMergeUnavailable:'There is no previous segment to merge with.',
           csvPreviewTitle:'CSV preview',csvPreviewLead:'Choose the series and format, inspect the content, then save it.',csvSeriesTargetLabel:'Series to save',csvSeriesAll:'All series',csvPreviewMeta:'{points} points · {series} series · {segments} segments · {filename}',csvPreviewTruncated:'Showing first {shown} lines of {total}',copyCsv:'Copy CSV',selectCsv:'Select preview',csvCopied:'CSV copied to the clipboard.',csvCopyFailed:'Automatic copy was unavailable. Select the preview and copy it manually.',
+          copySpreadsheet:'Copy for spreadsheet',spreadsheetHint:'Copy the selected series and format as tab-separated text, then paste into Excel or Google Sheets.',spreadsheetCopied:'All spreadsheet rows copied.',spreadsheetCopyFailed:'Automatic copy was unavailable. Manually copy the selected full text.',spreadsheetFallbackTitle:'Spreadsheet text (all rows)',selectSpreadsheet:'Select all rows',helpSpreadsheet:'Copy for spreadsheet copies all rows in the selected series, format, and order as TSV. Tabs, line breaks, and control characters in series names become spaces; names starting with formula markers or quotes receive an apostrophe prefix. Some paste targets display that apostrophe; numeric interpretation depends on locale. Original series names and CSV are unchanged. If clipboard access fails, select and copy the full text shown.',
           download:'Save CSV',backExtract:'Back to extract',
           helpTitle:'How to use & limitations',close:'Close',helpBasicsTitle:'Basic steps',
           helpStep1:'Add an image or PDF. For a PDF, choose a page and optionally crop the graph area before using it as the working image.',
@@ -1586,6 +1592,20 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         if(format!=='standard'&&format!=='simple')throw new RangeError('Invalid CSV format');
         const header=format==='simple'?'x,y':'series,segment,x,y';
         const values=rows.map(row=>format==='simple'?`${row.x},${row.y}`:`${csvEscape(row.name)},${row.segmentId},${row.x},${row.y}`);
+        return header+'\r\n'+values.join('\r\n')+(values.length?'\r\n':'');
+      }
+      // Spreadsheet clipboard cells are deliberately single-line. Quoting alone does not
+      // prevent spreadsheet formulas; protect only user text, never numeric coordinates.
+      function spreadsheetTextCell(value) {
+        const text=String(value).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g,' ');
+        return /^[\s]*[=+\-@"']/.test(text)?"'"+text:text;
+      }
+      function exportTSVText(points,calibration,series,format='standard') {
+        const rows=sortedSeriesValues(points,calibration,series);
+        if(format==='simple' && (series.length!==1 || points.some(point=>point.segmentId!==1))) throw new RangeError('Simple format requires one series and one segment');
+        if(format!=='standard'&&format!=='simple')throw new RangeError('Invalid TSV format');
+        const header=format==='simple'?'x\ty':'series\tsegment\tx\ty';
+        const values=rows.map(row=>format==='simple'?`${row.x}\t${row.y}`:`${spreadsheetTextCell(row.name)}\t${row.segmentId}\t${row.x}\t${row.y}`);
         return header+'\r\n'+values.join('\r\n')+(values.length?'\r\n':'');
       }
       function exportCSV(points,calibration,series,format='standard') {
@@ -2164,7 +2184,39 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         for(const item of items){const button=document.createElement('button');button.type='button';button.className='review-item';button.classList.toggle('is-selected',item.pointId===state.selectedId);const kind=document.createElement('span');kind.className=`review-kind ${item.kind==='gap'?'gap':''}`;const copy=document.createElement('span');copy.className='review-copy';const strong=document.createElement('strong');strong.textContent=`${translate(item.kind==='point'?'reviewPointLabel':'reviewGapLabel')} · ${item.name}`;const detail=document.createElement('span');detail.textContent=item.kind==='point'?`${translate('segmentShort')} ${item.segmentId}`:`${translate('segmentShort')} ${item.previousSegmentId} → ${item.segmentId}`;copy.append(strong,detail);const value=document.createElement('span');value.className='review-value';value.textContent=`X ${readableNumber(item.x)} · Y ${readableNumber(item.y)}`;button.append(kind,copy,value);button.addEventListener('click',()=>selectPointById(item.pointId,{step:'results',scrollRow:true}));list.append(button);}
         const selected=selectedPoint();$('#reviewMarkButton').disabled=!selected?.needsReview;$('#reviewEditButton').disabled=!selected;let splitDisabled=true,mergeDisabled=true;if(selected){const same=state.points.filter(item=>item.seriesId===selected.seriesId&&item.segmentId===selected.segmentId);try{const calibration=validation.calibration;const sorted=same.map((item,insertion)=>({item,insertion,...mapImagePoint(calibration,item.px,item.py)})).sort((a,b)=>a.x-b.x||a.insertion-b.insertion);splitDisabled=sorted.findIndex(row=>row.item.id===selected.id)<=0;}catch{}mergeDisabled=segmentIdsForSeries(selected.seriesId).indexOf(selected.segmentId)<=0;}$('#segmentSplitButton').disabled=splitDisabled;$('#segmentMergeButton').disabled=mergeDisabled;
       }
+      // GD:SPREADSHEET:BEGIN
+      let spreadsheetCopyGeneration=0;
+      function renderSpreadsheetCopy(validation){
+        spreadsheetCopyGeneration++;
+        $('#spreadsheetFallback').hidden=true;
+        $('#spreadsheetFallback').open=false;
+        $('#spreadsheetText').value='';
+        $('#copySpreadsheetButton').disabled=!validation.ok||!csvSelection().points.length;
+      }
+      async function copySpreadsheet(){
+        const validation=currentCalibration(),selection=csvSelection();
+        if(!validation.ok||!selection.points.length)return;
+        const generation=++spreadsheetCopyGeneration;
+        let text;
+        try{text=exportTSVText(selection.points,validation.calibration,selection.series,$('#csvFormat').value);}catch{return;}
+        $('#spreadsheetFallback').hidden=true;
+        $('#spreadsheetText').value='';
+        try{
+          if(!navigator.clipboard?.writeText)throw new Error('Clipboard API unavailable');
+          await navigator.clipboard.writeText(text);
+          if(generation!==spreadsheetCopyGeneration)return;
+          showToast(translate('spreadsheetCopied'),{tone:'success'});
+        }catch{
+          if(generation!==spreadsheetCopyGeneration)return;
+          const fallback=$('#spreadsheetFallback'),field=$('#spreadsheetText');
+          field.value=text;fallback.hidden=false;fallback.open=true;
+          field.focus();field.select();
+          showToast(translate('spreadsheetCopyFailed'),{tone:'warning'});
+        }
+      }
+      // GD:SPREADSHEET:END
       function renderCsvPreview(validation){
+        renderSpreadsheetCopy(validation);
         const preview=$('#csvPreview'),meta=$('#csvPreviewMeta'),copy=$('#copyCsvButton'),select=$('#selectCsvButton');if(!validation.ok){preview.value='';meta.textContent='';copy.disabled=true;select.disabled=true;return;}
         const selection=csvSelection(),format=$('#csvFormat').value;let text='';try{text=exportCSVText(selection.points,validation.calibration,selection.series,format);}catch{preview.value='';meta.textContent=translate('csvSimpleUnavailable');copy.disabled=true;select.disabled=true;return;}
         const lines=text.replace(/\r\n$/,'').split('\r\n'),max=201,shown=lines.slice(0,max);preview.value=shown.join('\n');const segments=totalSegmentCount(selection.points),filename=`${normalizedFilenameBase()}.csv`;meta.textContent=formatText('csvPreviewMeta',{points:selection.points.length,series:selection.series.length,segments,filename})+(lines.length>max?` · ${formatText('csvPreviewTruncated',{shown:max,total:lines.length})}`:'');copy.disabled=!selection.points.length;select.disabled=!preview.value;
@@ -2885,6 +2937,8 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       $('#csvSeriesTarget').addEventListener('change',()=>{state.csvTarget=$('#csvSeriesTarget').value;state.csvFormat=$('#csvFormat').value;markDirty();render();});
       $('#csvFormat').addEventListener('change',()=>{state.csvFormat=$('#csvFormat').value;markDirty();render();});
       $('#copyCsvButton').addEventListener('click',async()=>{const validation=currentCalibration(),selection=csvSelection();if(!validation.ok||!selection.points.length)return;let text;try{text=exportCSVText(selection.points,validation.calibration,selection.series,$('#csvFormat').value);}catch{return;}try{if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(text);else throw new Error('Clipboard API unavailable');showToast(translate('csvCopied'),{tone:'success'});}catch{const preview=$('#csvPreview');preview.focus();preview.select();let copied=false;try{copied=document.execCommand('copy');}catch{}showToast(translate(copied?'csvCopied':'csvCopyFailed'),{tone:copied?'success':'warning'});}});
+      $('#copySpreadsheetButton').addEventListener('click',copySpreadsheet);
+      $('#selectSpreadsheetButton').addEventListener('click',()=>{const field=$('#spreadsheetText');field.focus();field.select();});
       $('#selectCsvButton').addEventListener('click',()=>{const preview=$('#csvPreview');preview.focus();preview.select();});
       $('#downloadButton').addEventListener('click',downloadCSV);
       $('#outputFilename').addEventListener('change',()=>{state.csvBase=normalizedFilenameBase();markDirty();render();});
