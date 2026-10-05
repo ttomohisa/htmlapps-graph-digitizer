@@ -68,3 +68,15 @@ assert.deepEqual(gunzipSync(gzip),html,'self-extract must embed byte-for-byte re
 console.log('PASS template: required files, source markers, canonical SVG and no unresolved placeholders');
 console.log('PASS standalone: runtime network CSP, no external script/style, pinned embedded PDF.js dependency');
 console.log('PASS self-extract: ASCII template loader, manifest SHA-256 and byte-exact gzip payload');
+
+// Ignore build timestamps/asset encoding: app CSS, workbench and runtime must
+// stay identical in the source, tracked download, and newly built release.
+function appParts(html){
+  return [html.match(/<style>([\s\S]*?)<\/style>/)[1],
+    html.match(/<!-- APP:BEGIN[\s\S]*?<!-- APP:END -->/)[0],
+    html.slice(html.indexOf('      const translations = {'))];
+}
+for(const [name,release] of [['readable build',page],['tracked download',text('graph-digitizer.html')]]){
+  assert.deepEqual(appParts(release),appParts(source),`${name} app must match source`);
+}
+console.log('PASS release parity: source, tracked download and readable build app CSS/workbench/runtime');

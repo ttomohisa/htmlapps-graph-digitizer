@@ -543,6 +543,9 @@
 .pdf-actions{display:flex;flex-wrap:wrap;gap:7px}.pdf-actions .button{min-height:40px}
 .pdf-progress{display:grid;gap:6px;margin:8px 0}.pdf-progress progress{width:100%;accent-color:var(--accent)}
 .touch-precision{position:fixed;z-index:95;left:50%;bottom:calc(78px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(340px,calc(100vw - 22px));padding:10px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.98);box-shadow:0 12px 36px rgba(19,50,40,.20)}
+.touch-precision{max-height:calc(100dvh - 110px - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain}
+.point-coordinate-field input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.point-coordinate-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.point-coordinate-fields[hidden]{display:none}.point-coordinate-field{min-width:0}.point-coordinate-field label{display:block;font-size:12px;font-weight:700;margin-bottom:4px}.point-coordinate-field input{width:100%;min-width:0;min-height:40px}.point-coordinate-field .field-note{display:block}.point-coordinate-error{color:var(--danger);font-size:11px}.point-coordinate-error[hidden]{display:none}.point-coordinate-field input[aria-invalid="true"]{border-color:var(--danger)}
 .touch-precision[hidden]{display:none!important}.touch-precision-head{display:grid;grid-template-columns:108px minmax(0,1fr);gap:10px;align-items:center}.touch-precision canvas{width:108px;height:108px;border:1px solid var(--line);border-radius:9px;background:white;image-rendering:pixelated}.touch-precision strong{display:block;font-size:12px}.touch-precision output{display:block;margin-top:4px;font:600 11px ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted)}
 .touch-nudge{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,40px);gap:4px;justify-content:center;margin-top:8px}.touch-nudge button{min-width:44px;min-height:40px;padding:6px;display:grid;place-items:center}.touch-nudge svg{width:18px;height:18px}.touch-nudge .up{grid-column:2}.touch-nudge .left{grid-column:1;grid-row:2}.touch-nudge .right{grid-column:3;grid-row:2}.touch-nudge .down{grid-column:2;grid-row:3}.touch-precision-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.touch-precision-actions .button{min-height:44px}
 @media(min-width:601px){.touch-precision:not(.is-explicit-edit){display:none!important}.touch-precision.is-explicit-edit{bottom:28px}}
@@ -876,6 +879,10 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           <button class="button right" type="button" data-nudge="1,0" data-i18n-aria-label="nudgeRight" aria-label="右へ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
           <button class="button down" type="button" data-nudge="0,1" data-i18n-aria-label="nudgeDown" aria-label="下へ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
         </div>
+        <div class="point-coordinate-fields" id="pointCoordinateFields" hidden>
+          <div class="point-coordinate-field"><label for="pointEditPx" data-i18n="pointEditX">画像 X (px)</label><input id="pointEditPx" type="number" inputmode="decimal" min="0" step="any" aria-describedby="pointEditPxRange pointEditPxError"><span class="field-note" id="pointEditPxRange"></span><span class="point-coordinate-error" id="pointEditPxError" role="status" hidden></span></div>
+          <div class="point-coordinate-field"><label for="pointEditPy" data-i18n="pointEditY">画像 Y (px)</label><input id="pointEditPy" type="number" inputmode="decimal" min="0" step="any" aria-describedby="pointEditPyRange pointEditPyError"><span class="field-note" id="pointEditPyRange"></span><span class="point-coordinate-error" id="pointEditPyError" role="status" hidden></span></div>
+        </div>
         <div class="touch-precision-actions"><button class="button primary" type="button" id="touchPrecisionApply" data-i18n="precisionApply">この位置に置く</button><button class="button" type="button" id="touchPrecisionCancel" data-i18n="cancel">キャンセル</button></div>
       </div>
     </section>
@@ -945,7 +952,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         <li data-i18n="helpNoteStorage">作業は自動保存されません。ページを閉じる前にCSVを保存してください。</li>
         <li data-i18n="helpNoteBrowser">この版では水平X軸・垂直Y軸の線形グラフに対応します。</li>
         <li data-i18n="helpNoteTemplate">抽出数値は画像からの推定で、測定精度は保証できません。</li>
-        <li data-i18n="helpEditing">画像の拡大・移動、点のドラッグ編集、複数系列、Undo／Redo、切り抜きができます。切り抜きは元に戻せません。</li><li data-i18n="helpAutoTrace">自動追跡は色と連続性を使います。結果を必ず確認してください。</li>
+        <li data-i18n="helpEditing">選択した点はルーペの矢印や画像X／Y座標（小数可）で修正し、確定でまとめて変更できます。キャンセルや同じ位置の確定はデータ・履歴を変えません。位置の変更は手動・確認済みとなり、Undo／Redoで戻せます。切り抜きは元に戻せません。</li><li data-i18n="helpAutoTrace">自動追跡は色と連続性を使います。結果を必ず確認してください。</li>
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">単一HTMLとして保存し、オフラインで利用できます。</p>
       <!-- APP:HELP:END -->
@@ -1284,7 +1291,8 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           cropStart:'画像を切り抜く',cropApply:'切り抜きを確定',cropHint:'画像上で切り抜く範囲をドラッグしてください。校正点と抽出点を残す必要があります。',cropMissing:'切り抜く範囲をドラッグして指定してください。',cropTooSmall:'切り抜き範囲が小さすぎます。',cropOutside:'軸の校正点・抽出点が切り抜き範囲の外にあります。残す領域を選び直してください。',cropConfirmTitle:'画像を切り抜きますか？',cropConfirmBody:'画像外の部分を削除します。画像の切り抜きはUndoで戻せません。',cropApplied:'画像を切り抜きました。校正点と抽出点は保持しました。',
           seriesTitle:'系列を選択・編集',seriesHelp:'左の丸で系列を選択、隣の四角で色を変更します。非表示の系列もCSVに含まれます。',addSeries:'＋ 系列を追加',seriesName:'系列 {count}',seriesColor:'系列の色',seriesSelect:'系列を選択',seriesShow:'系列を表示',seriesHide:'系列を非表示',seriesDelete:'系列を削除',seriesDeleteTitle:'系列を削除しますか？',seriesDeleteBody:'「{name}」とその抽出点 {count} 個を削除します。Undoで戻せます。',seriesNeedOne:'系列は最低1つ必要です。',seriesLimit:'系列は最大12個です。',redo:'やり直す',csvFormatLabel:'CSVの形式',csvStandard:'標準：系列・区間・X・Y',csvSimple:'簡易：X・Y',csvSimpleUnavailable:'簡易CSVは1系列・1区間の場合に選べます。',
           inputActionsLabel:'入力',pointEditTitle:'手動で点を追加・修正',pointEditLead:'画像をクリックして追加。既存点は画像上で選び、修正ボタンまたはドラッグで位置を直せます。',selectedPointNone:'修正する点を画像上で選択してください',selectedPointSummary:'点 {index} · {source} · {px}, {py} px',sourceManual:'手動',sourceAuto:'自動追跡',editSelectedPoint:'選択した点を修正',manualCoordinatesSummary:'座標を直接入力して追加',historyActionsLabel:'編集履歴',nextActionsLabel:'次の操作',pointActionsLabel:'点の操作',segmentActionsLabel:'区間の操作',dataReviewSummary:'再描画グラフ・数値表を確認',exportTitle:'CSVを保存',exportLead:'対象系列・形式・ファイル名を確認して保存します。',csvPreviewSummary:'CSVの内容を確認',precisionEditPoint:'選択した点を修正',pointUpdated:'点の位置を更新しました。',
-          helpEditing:'画像の拡大・移動、点のドラッグ編集、複数系列、Undo／Redo、切り抜きに対応します。切り抜きは元に戻せません。',
+          pointEditX:'画像 X (px)',pointEditY:'画像 Y (px)',pointEditRange:'0〜{max} px（小数可）',pointEditInvalid:'0〜{max} の有限な数値を入力してください。',
+          helpEditing:'選択した点の修正では、ルーペの矢印または画像X／Y座標（小数可）を使い、確定で両座標をまとめて変更します。キャンセルや同じ位置の確定ではデータ・履歴・要確認状態は変わりません。位置の変更は手動・確認済みとなり、Undo／Redoで戻せます。画像の拡大・移動、複数系列、切り抜きにも対応します。切り抜きは元に戻せません。',
           autoTraceTitle:'自動追跡',autoTraceLead:'曲線の色と追跡範囲を指定し、結果を確認してから系列へ反映します。',
           traceModeLabel:'検出方法',traceModeCurve:'曲線',traceModeMarker:'マーカー',traceModeCurveHint:'線そのものを細かく追跡します。',traceModeMarkerHint:'四角・丸など、線上のデータ点だけを抽出します。',traceColorLabel:'曲線の色',tracePickColor:'画像から色を選ぶ',traceRangeLabel:'追跡範囲',traceRangeSelect:'範囲を指定',traceAxisRange:'軸の範囲',
           traceStartLabel:'開始点（任意）',traceStartSelect:'画像で指定',traceStartClear:'解除',traceDetails:'詳細設定',
@@ -1373,7 +1381,8 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           cropStart:'Crop image',cropApply:'Apply crop',cropHint:'Drag on the image to choose a crop area. Keep all calibration marks and picked points within the selection.',cropMissing:'Drag a rectangle on the image to choose a crop area.',cropTooSmall:'Choose a larger crop area.',cropOutside:'Some calibration marks or extracted points are outside the crop. Select an area that includes them.',cropConfirmTitle:'Crop this image?',cropConfirmBody:'The area outside the selection will be discarded. Cropping cannot be undone.',cropApplied:'Image cropped. Calibration and point locations were retained.',
           seriesTitle:'Select and edit series',seriesHelp:'Choose a series with the round button and its color with the square control. Hidden series still export.',addSeries:'＋ Add series',seriesName:'Series {count}',seriesColor:'Series color',seriesSelect:'Select series',seriesShow:'Show series',seriesHide:'Hide series',seriesDelete:'Delete series',seriesDeleteTitle:'Delete series?',seriesDeleteBody:'Delete “{name}” and its {count} extracted points? Undo can restore them.',seriesNeedOne:'At least one series is required.',seriesLimit:'Maximum of 12 series.',redo:'Redo',csvFormatLabel:'CSV format',csvStandard:'Standard: series, segment, x, y',csvSimple:'Simple: x, y',csvSimpleUnavailable:'Simple CSV is available for a single series and segment.',
           inputActionsLabel:'Input',pointEditTitle:'Add or repair points manually',pointEditLead:'Click the image to add a point. Select an existing point, then use Edit or drag it to correct the position.',selectedPointNone:'Select a point on the image to edit it',selectedPointSummary:'Point {index} · {source} · {px}, {py} px',sourceManual:'Manual',sourceAuto:'Auto-trace',editSelectedPoint:'Edit selected point',manualCoordinatesSummary:'Add by image coordinates',historyActionsLabel:'Edit history',nextActionsLabel:'Next actions',pointActionsLabel:'Point actions',segmentActionsLabel:'Segment actions',dataReviewSummary:'Review redrawn graph and values',exportTitle:'Save CSV',exportLead:'Confirm the series, format, and file name before saving.',csvPreviewSummary:'Review CSV contents',precisionEditPoint:'Edit selected point',pointUpdated:'Point position updated.',
-          helpEditing:'Zoom and pan the image, drag points to refine their positions, and use multiple series and Undo / Redo. Cropping cannot be undone.',
+          pointEditX:'Image X (px)',pointEditY:'Image Y (px)',pointEditRange:'0–{max} px (fractions allowed)',pointEditInvalid:'Enter a finite number from 0 to {max}.',
+          helpEditing:'Edit a selected point using the loupe arrows or image X/Y coordinates (fractions allowed), then apply both coordinates together. Cancel or an unchanged position leaves data, history, and review status untouched. A position change becomes manual/reviewed and can be undone/redone. Zoom, pan, multiple series, and cropping are supported. Cropping cannot be undone.',
           autoTraceTitle:'Auto-trace',autoTraceLead:'Choose the curve color and trace area, preview the result, then apply it to the active series.',
           traceModeLabel:'Detection method',traceModeCurve:'Curve',traceModeMarker:'Markers',traceModeCurveHint:'Trace the line itself at fine intervals.',traceModeMarkerHint:'Extract only visible data markers such as squares or circles.',traceColorLabel:'Curve color',tracePickColor:'Pick color from image',traceRangeLabel:'Trace area',traceRangeSelect:'Select area',traceAxisRange:'Use axis area',
           traceStartLabel:'Start point (optional)',traceStartSelect:'Pick on image',traceStartClear:'Clear',traceDetails:'Advanced settings',
@@ -1721,7 +1730,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       function refreshHistoryButtons(){for(const id of ['undoButton','resultUndoButton'])$(`#${id}`).disabled=!undoStack.length;for(const id of ['redoButton','resultRedoButton'])$(`#${id}`).disabled=!redoStack.length;}
       function markDirty(){if(state.image)state.dirty=true;}
       function recordHistory(previous=snapshot()) {undoStack.push(previous);if(undoStack.length>100)undoStack.shift();redoStack.length=0;markDirty();refreshHistoryButtons();}
-      function restoreSnapshot(saved){Object.assign(state,JSON.parse(JSON.stringify(saved)));
+      function restoreSnapshot(saved){clearTouchDraft();Object.assign(state,JSON.parse(JSON.stringify(saved)));
         for(const axis of AXES)document.querySelector(`[data-axis-input="${axis}"]`).value=state.values[axis];
         $('#xAxisScale').value=state.scales.x;$('#yAxisScale').value=state.scales.y;
         renderSeriesList();render();}
@@ -1740,7 +1749,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       function segmentIdsForSeries(seriesId){return [...new Set(state.points.filter(point=>point.seriesId===seriesId).map(point=>point.segmentId))].sort((a,b)=>a-b);}
       function totalSegmentCount(points=state.points){const keys=new Set(points.map(point=>`${point.seriesId}:${point.segmentId}`));return keys.size;}
       function selectedPoint(){return state.points.find(point=>point.id===state.selectedId)||null;}
-      function selectPointById(id,{step=null,scrollRow=false}={}){const point=state.points.find(item=>item.id===id);if(!point)return;state.selectedId=id;state.activeSeriesId=point.seriesId;renderSeriesList();if(step)goStep(step);else render();if(scrollRow)requestAnimationFrame(()=>document.querySelector(`#pointRows tr[data-point-id="${CSS.escape(id)}"]`)?.scrollIntoView({block:'nearest'}));}
+      function selectPointById(id,{step=null,scrollRow=false}={}){const point=state.points.find(item=>item.id===id);if(!point)return;if(touchDraft?.mode==='editPoint'&&touchDraft.id!==id)clearTouchDraft();state.selectedId=id;state.activeSeriesId=point.seriesId;renderSeriesList();if(step)goStep(step);else render();if(scrollRow)requestAnimationFrame(()=>document.querySelector(`#pointRows tr[data-point-id="${CSS.escape(id)}"]`)?.scrollIntoView({block:'nearest'}));}
       function normalizeSeriesSegments(seriesId){const ids=segmentIdsForSeries(seriesId);const map=new Map(ids.map((id,index)=>[id,index+1]));for(const point of state.points)if(point.seriesId===seriesId)point.segmentId=map.get(point.segmentId)||1;}
       function splitSelectedSegment(){const point=selectedPoint();if(!point)return;const seriesId=point.seriesId,originalSegmentId=point.segmentId;const same=state.points.filter(item=>item.seriesId===seriesId&&item.segmentId===originalSegmentId).map((item,insertion)=>({item,insertion,...mapImagePoint(currentCalibration().calibration,item.px,item.py)})).sort((a,b)=>a.x-b.x||a.insertion-b.insertion);const index=same.findIndex(row=>row.item.id===point.id);if(index<=0)return showToast(translate('segmentSplitUnavailable'),{tone:'warning'});recordHistory();for(const item of state.points)if(item.seriesId===seriesId&&item.segmentId>originalSegmentId)item.segmentId++;const nextSegmentId=originalSegmentId+1;for(let i=index;i<same.length;i++)same[i].item.segmentId=nextSegmentId;normalizeSeriesSegments(seriesId);render();showToast(translate('segmentSplitDone'),{tone:'success'});}
       function mergeSelectedSegment(){const point=selectedPoint();if(!point)return;const seriesId=point.seriesId,originalSegmentId=point.segmentId,ids=segmentIdsForSeries(seriesId),index=ids.indexOf(originalSegmentId);if(index<=0)return showToast(translate('segmentMergeUnavailable'),{tone:'warning'});recordHistory();const previous=ids[index-1];for(const item of state.points)if(item.seriesId===seriesId&&item.segmentId===originalSegmentId)item.segmentId=previous;normalizeSeriesSegments(seriesId);render();showToast(translate('segmentMergeDone'),{tone:'success'});}
@@ -2089,6 +2098,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         }
       }
       function render() {
+        if(touchDraft?.mode==='editPoint'&&!isPointEditDraftCurrent())clearTouchDraft();
         const validation = currentCalibration();
         if (!allowedStep(state.step)) {
           const fallback = state.image ? (validation.ok ? 'extract':'axis') : 'image';
@@ -2104,7 +2114,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         const chosenPoint=selectedPoint();
         $('#deletePointButton').disabled = !chosenPoint;$('#editSelectedPointButton').disabled=!chosenPoint;
         const chosenSummary=$('#selectedPointSummary');
-        if(chosenSummary){if(chosenPoint){const pointIndex=state.points.indexOf(chosenPoint)+1;chosenSummary.replaceChildren();const strong=document.createElement('strong');strong.textContent=format('selectedPointSummary',{index:pointIndex,source:translate(chosenPoint.source==='auto'?'sourceAuto':'sourceManual'),px:chosenPoint.px.toFixed(1),py:chosenPoint.py.toFixed(1)});const span=document.createElement('span');span.textContent=translate('keyboardHint');chosenSummary.append(strong,span);}else{chosenSummary.innerHTML=`<strong>${translate('selectedPointNone')}</strong>`;}}
+        if(chosenSummary){if(chosenPoint){const pointIndex=selectedPointDisplayIndex(chosenPoint.id,validation);chosenSummary.replaceChildren();const strong=document.createElement('strong');strong.textContent=format('selectedPointSummary',{index:pointIndex,source:translate(chosenPoint.source==='auto'?'sourceAuto':'sourceManual'),px:chosenPoint.px.toFixed(1),py:chosenPoint.py.toFixed(1)});const span=document.createElement('span');span.textContent=translate('keyboardHint');chosenSummary.append(strong,span);}else{chosenSummary.innerHTML=`<strong>${translate('selectedPointNone')}</strong>`;}}
         $('#resultSeries').textContent=String(state.series.length);$('#resultReview').textContent=String(state.points.filter(point=>point.needsReview).length);$('#resultSegments').textContent=String(totalSegmentCount());
         for(const id of ['zoomInButton','zoomOutButton','zoomResetButton','fitButton','cropModeButton'])$(`#${id}`).disabled=!state.image;
         $('#zoomOutButton').disabled=!state.image||state.view.zoom<=1;
@@ -2162,6 +2172,10 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         renderRows(validation);renderReview(validation);renderCsvPreview(validation);
         drawResultChart(validation);
         scheduleCanvasDraw();
+      }
+      function selectedPointDisplayIndex(id,validation){
+        if(validation.ok){try{return sortedSeriesValues(state.points,validation.calibration,state.series).findIndex(point=>point.id===id)+1;}catch{}}
+        return '—';
       }
       function renderRows(validation) {
         const body = $('#pointRows');body.replaceChildren();if (!validation.ok) return;
@@ -2322,11 +2336,65 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       function renderPdfControls(){const active=pdfState.phase!=='empty';$('#pdfCard').hidden=!active;$('#pdfStageWrap').hidden=!active;const status=$('#pdfStatus');status.textContent=pdfStatusText();status.classList.toggle('is-error',pdfState.phase==='error');const pdfBusy=pdfState.phase==='loading'||pdfState.phase==='rendering';$('#pdfProgressRow').hidden=!pdfBusy;const progress=$('#pdfProgress');if(pdfState.phase==='loading'){progress.value=pdfState.progress||0;}else{progress.removeAttribute('value');}$('#pdfProgressText').textContent=pdfState.phase==='loading'?`${Math.round(pdfState.progress||0)}%`:pdfState.phase==='rendering'?translate('pdfRendering'):'';$('#pdfMeta').textContent=active?`${pdfState.name}${pdfState.pageCount?` · ${pdfState.pageCount}p`:''}`:'—';$('#pdfRenderMeta').textContent=pdfState.pageCanvas?`${pdfState.pageCanvas.width} × ${pdfState.pageCanvas.height}px`:'';$('#pdfPrevButton').disabled=!pdfState.document||pdfState.pageNumber<=1||pdfState.phase==='rendering';$('#pdfNextButton').disabled=!pdfState.document||pdfState.pageNumber>=pdfState.pageCount||pdfState.phase==='rendering';$('#pdfPageSelect').disabled=!pdfState.document||pdfState.phase==='rendering';$('#pdfCropButton').disabled=!pdfState.pageCanvas||pdfState.phase==='rendering';$('#pdfUseButton').disabled=!pdfState.pageCanvas||pdfState.phase==='rendering';$('#pdfCropButton').textContent=translate(pdfState.crop?'pdfCropAgain':'pdfCrop');$('#pdfUseButton').textContent=translate(pdfState.crop?'pdfUseCrop':'pdfUse');if(pdfState.pageCount)$('#pdfPageSelect').value=String(pdfState.pageNumber);if(active)requestAnimationFrame(renderPdfCanvas);}
       function renderApp(){render();renderPdfControls();}
       function updateTouchMagnifier(){if(!touchDraft||!state.image)return;const canvas=$('#touchMagnifier'),ctx=canvas.getContext('2d');const d=canvas.width,source=28,x=Math.max(0,Math.min(state.imageWidth-source,touchDraft.point.px-source/2)),y=Math.max(0,Math.min(state.imageHeight-source,touchDraft.point.py-source/2));ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,d,d);ctx.drawImage(state.image,x,y,source,source,0,0,d,d);ctx.strokeStyle='#16624f';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(d/2,0);ctx.lineTo(d/2,d);ctx.moveTo(0,d/2);ctx.lineTo(d,d/2);ctx.stroke();$('#touchPrecisionCoords').textContent=`${touchDraft.point.px.toFixed(1)}, ${touchDraft.point.py.toFixed(1)} px`;$('#touchPrecisionTitle').textContent=touchDraft.mode==='axis'?format('precisionAxis',{axis:touchDraft.axis.toUpperCase()}):translate(touchDraft.mode==='editPoint'?'precisionEditPoint':'precisionPoint');}
-      function showTouchDraft(point,mode,axis=null,id=null){touchDraft={point:{px:point.px,py:point.py},mode,axis,id};const panel=$('#touchPrecision');panel.classList.toggle('is-explicit-edit',mode==='editPoint');panel.hidden=false;updateTouchMagnifier();}
+      function isPointEditDraftCurrent(){
+        if(touchDraft?.mode!=='editPoint')return false;
+        const point=state.points.find(item=>item.id===touchDraft.id);
+        // Object identity rejects Undo/Redo replacements even if the old values match.
+        return !!state.image&&touchDraft.generation===state.generation&&state.selectedId===touchDraft.id&&
+          point===touchDraft.target&&JSON.stringify(point)===touchDraft.original;
+      }
+      function syncPointCoordinateFields(){
+        const editing=touchDraft?.mode==='editPoint';$('#pointCoordinateFields').hidden=!editing;
+        $('#touchPrecisionApply').disabled=false;
+        if(!editing)return;
+        for(const [suffix,key,max] of [['Px','px',state.imageWidth],['Py','py',state.imageHeight]]){
+          const input=$(`#pointEdit${suffix}`);input.value=String(touchDraft.point[key]);input.max=String(max);
+          input.setAttribute('aria-invalid','false');$(`#pointEdit${suffix}Range`).textContent=format('pointEditRange',{max});
+          const error=$(`#pointEdit${suffix}Error`);error.textContent='';error.hidden=true;
+        }
+      }
+      function updatePointCoordinateDraft(){
+        if(!isPointEditDraftCurrent()){clearTouchDraft();return false;}
+        let valid=true;const next={};
+        for(const [suffix,key,max] of [['Px','px',state.imageWidth],['Py','py',state.imageHeight]]){
+          const input=$(`#pointEdit${suffix}`),text=input.value.trim(),value=Number(text);
+          const ok=!!text&&!input.validity.badInput&&Number.isFinite(value)&&value>=0&&value<=max;
+          input.setAttribute('aria-invalid',String(!ok));const error=$(`#pointEdit${suffix}Error`);
+          $(`#pointEdit${suffix}Range`).textContent=format('pointEditRange',{max});
+          error.textContent=ok?'':format('pointEditInvalid',{max});error.hidden=ok;next[key]=value;valid=valid&&ok;
+        }
+        $('#touchPrecisionApply').disabled=!valid;
+        if(valid){touchDraft.point=next;updateTouchMagnifier();}
+        return valid;
+      }
+      function showTouchDraft(point,mode,axis=null,id=null){
+        touchDraft={point:{px:point.px,py:point.py},mode,axis,id};
+        if(mode==='editPoint')Object.assign(touchDraft,{target:point,original:JSON.stringify(point),generation:state.generation});
+        const panel=$('#touchPrecision');panel.classList.toggle('is-explicit-edit',mode==='editPoint');panel.hidden=false;
+        syncPointCoordinateFields();updateTouchMagnifier();
+      }
       function clearTouchDraft(){touchDraft=null;const panel=$('#touchPrecision');if(panel){panel.hidden=true;panel.classList.remove('is-explicit-edit');}}
-      function applyTouchDraft(){if(!touchDraft)return;const draft=touchDraft;clearTouchDraft();if(draft.mode==='axis'){recordHistory();state.calibration[draft.axis[0]][draft.axis[1]==='1'?'p1':'p2']=draft.point;if(state.trace.range?.kind==='axis')state.trace.range=null;clearTracePreview();state.currentAxis=nextAxis();render();}else if(draft.mode==='point')addManualPoint(draft.point.px,draft.point.py);else if(draft.mode==='editPoint'){const point=state.points.find(item=>item.id===draft.id);if(!point)return;recordHistory();point.px=draft.point.px;point.py=draft.point.py;point.source='manual';point.needsReview=false;state.selectedId=point.id;render();showToast(translate('pointUpdated'),{tone:'success'});}}
-      function editSelectedPoint(){const point=selectedPoint();if(!point)return;goStep('extract');showTouchDraft(point,'editPoint',null,point.id);requestAnimationFrame(()=>$('#touchPrecisionApply')?.focus());}
-      function nudgeTouchDraft(dx,dy){if(!touchDraft)return;touchDraft.point.px=Math.max(0,Math.min(state.imageWidth,touchDraft.point.px+dx));touchDraft.point.py=Math.max(0,Math.min(state.imageHeight,touchDraft.point.py+dy));updateTouchMagnifier();}
+      function applyTouchDraft(){
+        if(!touchDraft)return;
+        if(touchDraft.mode==='editPoint'&&!updatePointCoordinateDraft())return;
+        const draft=touchDraft;clearTouchDraft();
+        if(draft.mode==='axis'){recordHistory();state.calibration[draft.axis[0]][draft.axis[1]==='1'?'p1':'p2']=draft.point;if(state.trace.range?.kind==='axis')state.trace.range=null;clearTracePreview();state.currentAxis=nextAxis();render();}
+        else if(draft.mode==='point')addManualPoint(draft.point.px,draft.point.py);
+        else if(draft.mode==='editPoint'){
+          const point=draft.target;
+          if(point.px===draft.point.px&&point.py===draft.point.py)return;
+          recordHistory();point.px=draft.point.px;point.py=draft.point.py;point.source='manual';point.needsReview=false;
+          state.selectedId=point.id;render();showToast(translate('pointUpdated'),{tone:'success'});
+        }
+      }
+      function editSelectedPoint(){const point=selectedPoint();if(!point)return;goStep('extract');showTouchDraft(point,'editPoint',null,point.id);requestAnimationFrame(()=>$('#pointEditPx')?.focus());}
+      function nudgeTouchDraft(dx,dy){
+        if(!touchDraft)return;
+        if(touchDraft.mode==='editPoint'&&!updatePointCoordinateDraft())return;
+        touchDraft.point.px=Math.max(0,Math.min(state.imageWidth,touchDraft.point.px+dx));
+        touchDraft.point.py=Math.max(0,Math.min(state.imageHeight,touchDraft.point.py+dy));
+        syncPointCoordinateFields();updateTouchMagnifier();
+      }
 
       // GD:PROJECT:BEGIN
       const PROJECT_FORMAT='browser-kitty.graph-digitizer';
@@ -2688,6 +2756,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         document.title=APP_CONFIG.name;
         $('#brandName').textContent=APP_CONFIG.name;
         $('#footerName').textContent=APP_CONFIG.name;
+        if(touchDraft?.mode==='editPoint')updatePointCoordinateDraft();
         renderSeriesList();render();
       }
       function findNearestPoint(event,radius=12){const box=$('#graphCanvas').getBoundingClientRect();
@@ -2710,7 +2779,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         const near=pointMode?findNearestPoint(event):null;
         const kind=view.cropMode?'crop':state.trace.rangeMode?'traceRange':near?'point':(!state.trace.colorPickMode&&!state.trace.startMode?'pan':'other');
         pointerAction={kind,id:near?.id,startX:event.clientX,startY:event.clientY,
-          startPanX:view.panX,startPanY:view.panY,initial:near?{px:near.px,py:near.py}:null,
+          startPanX:view.panX,startPanY:view.panY,initial:near?{...near}:null,
           snapshot:near?snapshot():null,cropStart:pt,traceRangeStart:pt,moved:false};
         if(near){state.selectedId=near.id;state.activeSeriesId=near.seriesId;renderSeriesList();render();}
         if(kind==='pan'||kind==='crop'||kind==='traceRange'||near){event.currentTarget.setPointerCapture?.(event.pointerId);if(event.pointerType==='touch')event.preventDefault();}
@@ -2726,7 +2795,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           state.view.panY=action.startPanY+(event.clientY-action.startY);clampView();scheduleCanvasDraw();
         }else if(action.kind==='point'){
           const point=state.points.find(item=>item.id===action.id),position=imagePointFromEvent(event);
-          if(point&&position){point.px=position.px;point.py=position.py;point.source='manual';point.needsReview=false;render();}
+          if(point&&position){point.px=position.px;point.py=position.py;render();}
         }else if(action.kind==='crop'){
           const rect=$('#graphCanvas').getBoundingClientRect();const v=state.view;
           const candidate=screenToImage({x:event.clientX-rect.left,y:event.clientY-rect.top},currentSize(),
@@ -2746,14 +2815,14 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       }
       function endPointer(event){const action=pointerAction;if(!action)return;pointerAction=null;
         if(event.type==='pointercancel'){
-          if(action.kind==='point'&&action.initial){const point=state.points.find(item=>item.id===action.id);if(point)Object.assign(point,action.initial);}
+          if(action.kind==='point'&&action.initial){const point=state.points.find(item=>item.id===action.id);if(point){point.px=action.initial.px;point.py=action.initial.py;}}
           if(action.kind==='pan'){state.view.panX=action.startPanX;state.view.panY=action.startPanY;}
           if(action.kind==='crop')state.view.crop=null;
           if(action.kind==='traceRange')state.trace.range=null;
           skipClick=true;render();return;
         }
         if(action.kind==='point' && action.moved){const pt=state.points.find(item=>item.id===action.id);
-          if(pt && (pt.px!==action.initial.px||pt.py!==action.initial.py))recordHistory(action.snapshot);
+          if(pt && (pt.px!==action.initial.px||pt.py!==action.initial.py)){recordHistory(action.snapshot);pt.source='manual';pt.needsReview=false;}
           render();}
         if(action.kind==='crop' && action.moved)scheduleCanvasDraw();
         if(action.kind==='traceRange'){
@@ -2843,6 +2912,9 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       $('#pdfUseButton').addEventListener('click',usePdfPage);
       $('#pdfCancelButton').addEventListener('click',()=>closePdfStage());
       const pdfCanvas=$('#pdfCanvas');pdfCanvas.addEventListener('pointerdown',beginPdfPointer);pdfCanvas.addEventListener('pointermove',movePdfPointer);pdfCanvas.addEventListener('pointerup',endPdfPointer);pdfCanvas.addEventListener('pointercancel',()=>{pdfPointer=null;pdfState.crop=null;pdfState.cropMode=false;renderApp();});
+      // GD:POINT-EDIT:LISTENERS:BEGIN
+      for(const id of ['pointEditPx','pointEditPy'])$(`#${id}`).addEventListener('input',updatePointCoordinateDraft);
+      // GD:POINT-EDIT:LISTENERS:END
       $('#touchPrecisionApply').addEventListener('click',applyTouchDraft);$('#touchPrecisionCancel').addEventListener('click',clearTouchDraft);
       document.querySelectorAll('[data-nudge]').forEach(button=>button.addEventListener('click',()=>{const [dx,dy]=button.dataset.nudge.split(',').map(Number);nudgeTouchDraft(dx,dy);}));
       $('#sampleButton').addEventListener('click',useSample);
@@ -2915,9 +2987,11 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
         const deltas={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
         const delta=deltas[event.key];if(!delta)return;
         const point=state.points.find(p=>p.id===state.selectedId);if(!point)return;
-        event.preventDefault();recordHistory();const amount=event.shiftKey?10:1;
-        point.px=Math.min(state.imageWidth,Math.max(0,point.px+delta[0]*amount));
-        point.py=Math.min(state.imageHeight,Math.max(0,point.py+delta[1]*amount));point.source='manual';point.needsReview=false;render();
+        event.preventDefault();const amount=event.shiftKey?10:1;
+        const px=Math.min(state.imageWidth,Math.max(0,point.px+delta[0]*amount));
+        const py=Math.min(state.imageHeight,Math.max(0,point.py+delta[1]*amount));
+        if(px===point.px&&py===point.py)return;
+        recordHistory();point.px=px;point.py=py;point.source='manual';point.needsReview=false;render();
       });
       document.addEventListener('keydown',event=>{
         const target=event.target;

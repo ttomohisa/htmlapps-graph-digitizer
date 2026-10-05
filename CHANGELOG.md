@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added exact fractional image X/Y editing to the selected-point loupe, with per-field bounds/errors and atomic Apply/Cancel. Invalid and obsolete drafts cannot change point data; identity, calibration, project format, dependencies, and CSV/TSV behavior stay unchanged.
+- Fixed cancelled/return-to-start dragging and clamped keyboard nudges silently changing automatic/review metadata or consuming Undo/Redo. Only real movement marks a point manual/reviewed and creates one history entry.
+- Made the repair summary's point number agree with the sorted Results table, including multiple series, segments, and equal-X points.
+- Added source/controller regression tests plus tracked-download/readable/self-extract parity checks. Native pointer capture, loupe rendering, mobile layout/keyboard, and visual selection still require browser/device verification for this change.
+
 - Added a separate Japanese/English “Copy for spreadsheet” action using selected-series/format TSV, without changing CSV or project files.
 - Spreadsheet-only text-cell normalization prevents tab/newline row splitting and protects formula-like or quote-leading series names; numeric values remain untouched.
 - Clipboard rejection or absence opens a selectable full-text fallback, including data beyond the truncated CSV preview; stale asynchronous results are ignored.
