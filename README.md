@@ -19,7 +19,7 @@ GitHub Pages delivers the initial HTML. After it loads, image/PDF decoding, PDF 
 ## Features
 
 - **Calibrate real graph axes** — Place X1, X2, Y1, and Y2, enter the corresponding values, and choose Linear or log10 independently for each axis. Reversed numerical directions and mildly rotated straight XY axes are supported.
-- **Digitize by hand with precise repair tools** — Click the graph to add points, drag existing points, or open the selected-point repair view with a loupe and 1-pixel nudging. Multiple named/color-coded series and Undo/Redo are supported.
+- **Digitize by hand with precise repair tools** — Click the graph to add points, drag existing points, or open the selected-point repair view with a loupe, 1-pixel nudging, and exact image X/Y pixel inputs (including fractions). Multiple named/color-coded series and Undo/Redo are supported.
 - **Trace colored curves before committing them** — Pick a curve color, use the calibrated axis area or a custom rectangle, optionally choose a start point, tune tolerance/continuity/sampling, and preview the detected result before applying it to a series.
 - **Extract visible data markers as points** — Marker mode detects the centers of visible square/circle-style plot markers instead of sampling the connecting line. Select a false detection in the preview and press `Delete` / `Backspace` to exclude it before applying the result.
 - **Review rather than trust blindly** — Review-needed points and segment boundaries stay visible. The source overlay, redrawn numeric graph, review list, and coordinate table share the same selected point; points and segments can be repaired from Results.
@@ -53,6 +53,12 @@ The standalone build uses Windows PowerShell and the built-in `tar.exe`. Node.js
 6. Drag the working image to pan and use the mouse wheel to zoom. The percentage control returns the image to 100%, while the adjacent Fit icon shows the whole image.
 7. Save a `.graphdigitizer.json` project whenever you want to resume later. Project files are validated before they replace current work.
 8. In **Results**, inspect review-needed points and segment boundaries, repair them if necessary, choose the target series/CSV format, check the CSV preview, and save the CSV.
+
+### Repair an exact point position
+
+Select a point and choose **Edit selected point** (or **Edit on image** in Results). Enter **Image X (px)** and **Image Y (px)** in the loupe panel, or use its nudge buttons. These are working-image pixels, not calibrated graph values. Both accept fractions and inclusive bounds from zero to the displayed image width/height. Invalid or blank fields keep Apply disabled until corrected.
+
+Apply changes both coordinates in one Undo step, preserves the point/series/segment identity, and marks a moved point manual/reviewed. Cancel, an unchanged Apply, a drag back to its starting position, or an arrow blocked at an image edge does not change history, review status, or unsaved state. A stale edit closes after selection, source, target, or history changes. Use **Mark reviewed** to approve a point without moving it.
 
 ### Paste into a spreadsheet
 
@@ -136,8 +142,11 @@ node tests/test-v040-core.mjs
 node tests/test-v060-core.mjs
 node tests/test-v070-core.mjs
 node tests/test-spreadsheet-copy.mjs
+node --test tests/test-point-editing.mjs
 node tests/test-standalone.mjs
 ```
+
+The point-editing suite executes actual app functions/handlers with numerical fixtures and a small DOM seam; it does not verify native pointer capture, rendered loupe alignment, mobile keyboard/layout, or visual selection. Set `GD_HTML` to a generated HTML path to repeat it against that artifact.
 
 Chromium integration regressions are under `tests/test-*-browser.py` and use Python Playwright.
 

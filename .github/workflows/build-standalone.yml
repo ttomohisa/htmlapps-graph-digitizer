@@ -51,6 +51,18 @@ jobs:
         shell: pwsh
         run: node tests/test-spreadsheet-copy.mjs
 
+      - name: Graph Digitizer exact point editing regression
+        shell: pwsh
+        run: |
+          node --test tests/test-point-editing.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:GD_HTML = "dist/index.html"
+          node --test tests/test-point-editing.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $env:GD_HTML = "graph-digitizer.html"
+          node --test tests/test-point-editing.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
       - name: Graph Digitizer standalone and template invariant tests
         shell: pwsh
         run: node tests/test-standalone.mjs
