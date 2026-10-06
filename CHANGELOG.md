@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 - 2026-10-06
+
+- Standardize the local-processing badge and compact EN / JA target-language control, including localized accessible names, titles, and Help.
+- Keep application processing, data formats, privacy boundaries, dependencies, and layouts unchanged.
+- Add source and generated-artifact header regressions. Real-browser verification is tracked separately.
+
+
 ## Unreleased
 
 - Added exact fractional image X/Y editing to the selected-point loupe, with per-field bounds/errors and atomic Apply/Cancel. Invalid and obsolete drafts cannot change point data; identity, calibration, project format, dependencies, and CSV/TSV behavior stay unchanged.
