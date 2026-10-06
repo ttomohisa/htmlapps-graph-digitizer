@@ -391,3 +391,10 @@ Project
 ## 13. 仕様確定時の変更履歴
 
 - 2026-09-24 / 文書v1.0：XYグラフ専用として範囲を限定。自動追跡と手動修正を中核に設定。PDF、対数軸、複数系列、作業ファイル保存・再開をv1.0.0の要件へ確定。リリース工程を `DEVELOPMENT_PLAN.md` に分離。
+
+## Header consistency (v1.0.1)
+
+- Display the canonical three-part app version as `vX.Y.Z`.
+- Show `完全ローカル処理` in Japanese and `Fully local processing` in English; preserve the more detailed privacy explanations.
+- The language button shows the target language: `EN` in Japanese UI and `JA` in English UI. Its accessible name and title describe that target in the current UI language.
+- Keep Help accessible names and titles localized, without resetting work when switching languages.

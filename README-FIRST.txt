@@ -1,4 +1,4 @@
-Graph Digitizer v1.0.0 — Browser Kitty
+Graph Digitizer v1.0.1 — Browser Kitty
 ===================================
 
 Start with README.ja.md / README.md for usage, build, privacy, limitations, and deployment.
