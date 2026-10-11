@@ -1,6 +1,6 @@
 # Graph Digitizer
 
-Header: v1.0.1. The privacy badge reads “Fully local processing”; the language button shows EN in Japanese and JA in English, with localized target-language and Help descriptions.
+Header: v1.0.2. The privacy badge reads “Fully local processing”; the language button shows EN in Japanese and JA in English, with localized target-language and Help descriptions.
 
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-graph-digitizer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-graph-digitizer/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -55,6 +55,8 @@ The standalone build uses Windows PowerShell and the built-in `tar.exe`. Node.js
 6. Drag the working image to pan and use the mouse wheel to zoom. The percentage control returns the image to 100%, while the adjacent Fit icon shows the whole image.
 7. Save a `.graphdigitizer.json` project whenever you want to resume later. Project files are validated before they replace current work.
 8. In **Results**, inspect review-needed points and segment boundaries, repair them if necessary, choose the target series/CSV format, check the CSV preview, and save the CSV.
+
+Help and confirmation dialogs keep the background page still. On a short screen, scroll inside the dialog content to reach its end or the confirmation actions; the Close button remains at the top. Closing the dialog restores normal page scrolling. The point-precision panel remains nonmodal.
 
 ### Repair an exact point position
 
@@ -145,10 +147,13 @@ node tests/test-v060-core.mjs
 node tests/test-v070-core.mjs
 node tests/test-spreadsheet-copy.mjs
 node --test tests/test-point-editing.mjs
+node --test tests/dialog-layout.test.cjs
 node tests/test-standalone.mjs
 ```
 
 The point-editing suite executes actual app functions/handlers with numerical fixtures and a small DOM seam; it does not verify native pointer capture, rendered loupe alignment, mobile keyboard/layout, or visual selection. Set `GD_HTML` to a generated HTML path to repeat it against that artifact.
+
+The modal suite checks CSS/HTML contracts and existing confirmation/Help handlers. Set `APP_HTML` to a readable or self-extracting HTML file to test that artifact; `check-repository.ps1` runs it on source and both fresh build variants. It does not measure native layout or scrolling. Browser verification should include Japanese/English at 393×252px, narrow mobile, and desktop sizes, reaching the final Help item and both confirmation actions, outside wheel/touch gestures, closing, and reopening.
 
 Chromium integration regressions are under `tests/test-*-browser.py` and use Python Playwright.
 

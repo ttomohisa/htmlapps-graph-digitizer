@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 - 2026-10-11
+
+- Lock background document scrolling while native Help or confirmation dialogs are open, without affecting the nonmodal point-precision panel.
+- Keep confirmation headers visible and allow the message plus Cancel/Continue actions to scroll inside the viewport on short screens. Preserve the existing Help layout and mobile safe-area padding.
+- Update Japanese/English Help and usage notes. Add wrapper-aware source/CSS and real-handler regressions to the canonical repository gate used by PR and Pages builds; native browser checks remain a separate verification step.
+
 ## 1.0.1 - 2026-10-06
 
 - Standardize the local-processing badge and compact EN / JA target-language control, including localized accessible names, titles, and Help.
