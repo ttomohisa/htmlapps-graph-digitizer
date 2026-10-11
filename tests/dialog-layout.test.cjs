@@ -66,16 +66,8 @@ test('the existing Help scroll chain and nonmodal precision-panel geometry remai
   assert.match(badge, /d="m9 12 2 2 4-5"/);
 });
 
-test('both language dictionaries explain inner scrolling and modal background locking', () => {
-  const source = html.match(/const translations\s*=\s*(\{[\s\S]*?\n\s*\});/)?.[1];
-  assert.ok(source);
-  const translations = vm.runInNewContext(`(${source})`);
-  const help = html.match(/<!-- APP:HELP:BEGIN -->([\s\S]*?)<!-- APP:HELP:END -->/)?.[1];
-  assert.match(help, /data-i18n="helpDialogScroll"/);
-  assert.match(translations.ja.helpDialogScroll || '', /スクロール/);
-  assert.match(translations.ja.helpDialogScroll || '', /背景/);
-  assert.match(translations.en.helpDialogScroll || '', /scroll/i);
-  assert.match(translations.en.helpDialogScroll || '', /background/i);
+test('Help excludes layout audit commentary', () => {
+  assert.equal(html.includes('helpDialogScroll'), false);
 });
 
 function harness() {
