@@ -229,12 +229,29 @@ if ([string]::IsNullOrWhiteSpace([string]$app.name)) { throw "app.config.json: n
 if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: slug is required" }
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 
+# Modal source and release contracts run through both PR validation and Pages CI.
+function Invoke-ModalLayoutTests {
+  param([string[]]$Paths)
+  $previousAppHtml = $env:APP_HTML
+  try {
+    foreach ($relative in $Paths) {
+      $env:APP_HTML = Join-Path $Root $relative
+      & node --test (Join-Path $Root "tests\dialog-layout.test.cjs")
+      if ($LASTEXITCODE -ne 0) { throw "Modal layout regression tests failed: $relative" }
+    }
+  } finally {
+    $env:APP_HTML = $previousAppHtml
+  }
+}
+Invoke-ModalLayoutTests -Paths @("src/index.template.html")
+
 & node --test (Join-Path $Root "tests/header-consistency.test.cjs")
 if ($LASTEXITCODE -ne 0) { throw "Header consistency regression tests failed." }
 
 $buildArguments = @{}
 if ($ForceDownload) { $buildArguments.ForceDownload = $true }
 & (Join-Path $Root "build-standalone.ps1") @buildArguments
+Invoke-ModalLayoutTests -Paths @("dist/index.html", "dist/index.self-extract.html")
 
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 

@@ -1,6 +1,6 @@
 # Graph Digitizer
 
-ヘッダーのバージョンは v1.0.1。プライバシーバッジは「完全ローカル処理」、言語ボタンは日本語表示中に EN、英語表示中に JA と表示します。切替先と言語に合ったヘルプの説明を表示します。
+ヘッダーのバージョンは v1.0.2。プライバシーバッジは「完全ローカル処理」、言語ボタンは日本語表示中に EN、英語表示中に JA と表示します。切替先と言語に合ったヘルプの説明を表示します。
 
 [![GitHub Pages](https://github.com/ttomohisa/htmlapps-graph-digitizer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ttomohisa/htmlapps-graph-digitizer/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -55,6 +55,8 @@ GitHub Pagesから最初のHTMLを読み込んだ後、画像／PDFの読み込�
 6. 作業画像は**ドラッグで移動、マウスホイールで拡大縮小**できます。倍率表示をクリックすると100%へ戻り、右隣の全体表示アイコンで画像全体を表示します。
 7. 長い作業は `.graphdigitizer.json` として保存できます。作業ファイルは形式を検証してから現在の作業へ復元します。
 8. **結果**で要確認点と区間の切れ目を確認・修正し、対象系列とCSV形式を選び、CSVプレビューを確認して保存します。
+
+ヘルプや確認画面を開いている間は、背景のページをスクロールしません。画面が低いときは内容部分をスクロールすると、末尾や確認ボタンへ進めます。閉じるボタンは上部に残り、閉じると通常のページスクロールに戻ります。精密配置パネルは従来どおり非モーダルです。
 
 ### 点を正確な画像座標へ修正する
 
@@ -145,10 +147,13 @@ node tests/test-v060-core.mjs
 node tests/test-v070-core.mjs
 node tests/test-spreadsheet-copy.mjs
 node --test tests/test-point-editing.mjs
+node --test tests/dialog-layout.test.cjs
 node tests/test-standalone.mjs
 ```
 
 点編集テストは実際のアプリ関数・イベント処理を数値フィクスチャと簡易DOMで実行します。ネイティブのポインター捕捉、ルーペの描画位置、スマートフォンのキーボード／表示、選択点の見た目は検証しません。`GD_HTML`に生成HTMLのパスを指定すると同じテストを配布物に対して実行できます。
+
+モーダルのテストはCSS／HTML契約と既存の確認／ヘルプ処理を検証します。`APP_HTML`に読みやすいHTMLまたは自己展開HTMLを指定でき、`check-repository.ps1`がソースと新規ビルドした両形式を検証します。実際の表示やスクロール量は測定しません。ブラウザーでは日英、393×252px、狭いスマートフォン、PCで、ヘルプ末尾／確認の両ボタンへの到達、外側のホイール／タッチ、閉じる操作と再表示を別途確認してください。
 
 Chromiumの統合回帰は `tests/test-*-browser.py` にあり、Python Playwrightを使用します。
 
