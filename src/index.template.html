@@ -669,6 +669,10 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.001ms!important; animation-duration:.001ms!important; animation-iteration-count:1!important; }
     }
+    @media (max-width: 600px) { body > footer { display: none; } }
+    #helpDialog .help-build { margin-top: 18px; color: var(--muted); font-size: 11px; box-shadow: none; }
+    #helpDialog .help-build summary { padding: 10px 12px; font: inherit; }
+    #helpDialog .help-build .build-item strong { font-size: 11px; font-weight: 400; }
 </style>
 </head>
 <body>
@@ -910,16 +914,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       <div class="info-block" style="margin:0"><strong id="disclaimerTitle" data-i18n="disclaimerTitle">抽出値について</strong><p style="margin:4px 0 0" data-i18n="disclaimerBody">画像から推定した値です。元の測定精度は保証できません。</p></div>
     </section>
 
-    <section class="shell section">
-      <details>
-        <summary data-i18n="buildInfo">Build information</summary>
-        <div class="build-grid">
-          <div class="build-item"><span data-i18n="appVersion">App version</span><strong id="buildVersion">—</strong></div>
-          <div class="build-item"><span data-i18n="builtAt">Built at</span><strong id="builtAt">—</strong></div>
-          <div class="build-item"><span data-i18n="dependencies">Embedded dependencies</span><strong id="dependencyCount">0</strong></div>
-        </div>
-      </details>
-    </section>
+
   </main>
 
   <footer><span id="footerName">Graph Digitizer</span> · MIT License · <span data-i18n="footer">グラフ画像と数値は端末内で処理します</span></footer>
@@ -975,6 +970,14 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">単一HTMLとして保存し、オフラインで利用できます。</p>
       <!-- APP:HELP:END -->
+      <details class="help-build">
+        <summary data-i18n="buildInfo">Build information</summary>
+        <div class="build-grid">
+          <div class="build-item"><span data-i18n="appVersion">App version</span><strong id="buildVersion">—</strong></div>
+          <div class="build-item"><span data-i18n="builtAt">Built at</span><strong id="builtAt">—</strong></div>
+          <div class="build-item"><span data-i18n="dependencies">Embedded dependencies</span><strong id="dependencyCount">0</strong></div>
+        </div>
+      </details>
     </div>
   </dialog>
 
@@ -2910,6 +2913,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       $('#helpButton').addEventListener('click',()=>{helpRestoreFocus=document.activeElement;helpDialog.showModal();});
       $('#closeHelpButton').addEventListener('click',()=>helpDialog.close());
       helpDialog.addEventListener('click',event=>{
+        if (event.target !== helpDialog) return;
         const rect=helpDialog.getBoundingClientRect();
         if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)helpDialog.close();
       });

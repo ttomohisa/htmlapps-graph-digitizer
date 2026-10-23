@@ -77,7 +77,7 @@ function harness() {
   class Element {
     constructor() { this.listeners = new Map(); this.isConnected = true; this.open = false; this.classList = { toggle() {} }; }
     addEventListener(type, callback) { const list = this.listeners.get(type) || []; list.push(callback); this.listeners.set(type, list); }
-    emit(type, fields = {}) { const event = { clientX: 50, clientY: 50, prevented: false, preventDefault() { this.prevented = true; }, ...fields }; for (const callback of this.listeners.get(type) || []) callback(event); return event; }
+    emit(type, fields = {}) { const event = { target: this, clientX: 50, clientY: 50, prevented: false, preventDefault() { this.prevented = true; }, ...fields }; for (const callback of this.listeners.get(type) || []) callback(event); return event; }
     showModal() { this.open = true; }
     close() { this.open = false; this.emit('close'); }
     focus(options) { this.focusOptions = options; document.activeElement = this; }
@@ -127,6 +127,8 @@ test('Help keeps close, native-close restoration, backdrop dismissal, and reopen
     assert.equal(h.$('#helpDialog').open, true);
     h.$('#helpDialog').emit('click');
     assert.equal(h.$('#helpDialog').open, true);
+    h.$('#helpDialog').emit('click', { target: h.$('#buildSummary'), clientX: 0, clientY: 0 });
+    assert.equal(h.$('#helpDialog').open, true, 'keyboard activation of an inner summary stays inside Help');
     if (close === 'button') h.$('#closeHelpButton').emit('click');
     else if (close === 'native') h.$('#helpDialog').close();
     else h.$('#helpDialog').emit('click', { clientX: 0, clientY: 0 });

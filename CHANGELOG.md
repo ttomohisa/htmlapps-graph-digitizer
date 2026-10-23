@@ -15,6 +15,8 @@
 
 ## Unreleased
 
+- Hide the phone informational footer and place existing build details at the end of Help, preserving keyboard access and functional controls.
+
 - Added exact fractional image X/Y editing to the selected-point loupe, with per-field bounds/errors and atomic Apply/Cancel. Invalid and obsolete drafts cannot change point data; identity, calibration, project format, dependencies, and CSV/TSV behavior stay unchanged.
 - Fixed cancelled/return-to-start dragging and clamped keyboard nudges silently changing automatic/review metadata or consuming Undo/Redo. Only real movement marks a point manual/reviewed and creates one history entry.
 - Made the repair summary's point number agree with the sorted Results table, including multiple series, segments, and equal-X points.
