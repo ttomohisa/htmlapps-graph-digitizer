@@ -406,3 +406,10 @@ Project
 - 既存ヘルプの高さ・ヘッダー・本文スクロール、確認のモバイル下部配置／余白、閉じる／Esc／背景クリック、フォーカス復帰と確認結果の処理を維持する。点編集、追跡、座標変換、保存形式、ローカル処理バッジのアイコンは変更しない。
 - 受入確認：日英、PC、狭いスマートフォン、393×252pxの短い表示で、背景へのホイール操作がページを動かさず、ヘルプ末尾および確認のキャンセル／実行へ本文内スクロールで到達できる。閉じるボタンが残り、閉じた後のページスクロールと再表示が正常であること。
 - `tests/dialog-layout.test.cjs` はCSS・HTML契約と実ハンドラーを検証し、`APP_HTML` で読みやすいHTML／自己展開HTMLを指定できる。`scripts/check-repository.ps1` からソースとビルド後の両形式を検証する。実レイアウト・ホイール／タッチ・セーフエリアは別途ブラウザーで確認する。
+
+## Phone footer and Help build information
+
+- Hide only the informational page footer at the existing 600px phone layout breakpoint; preserve media controls, mobile navigation, and their spacing.
+- Keep existing canonical local-processing labels and the header version unchanged.
+- Move existing build details, with their IDs, populated values, and collapsed/expanded interaction, to the final quiet section of Help. Preserve phone availability and keyboard activation without dismissing Help.
+- Generated reports/forms and their footers are unchanged.
