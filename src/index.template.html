@@ -95,7 +95,7 @@
       border-radius: 999px;
       color: var(--muted);
       background: var(--surface-muted);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 650;
       vertical-align: 2px;
     }
@@ -146,6 +146,8 @@
     .icon-button:hover { border-color: var(--line-strong); background: var(--surface-hover); }
     .icon-button:active { transform: translateY(1px); }
     .icon-button svg { width: 18px; height: 18px; display: block; }
+    .dialog-close { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 9px; background: transparent; cursor: pointer; }
+    .dialog-close svg { width: 18px; height: 18px; }
     .header-icon-button {
       width: auto;
       height: auto;
@@ -184,13 +186,13 @@
       gap: 7px;
       flex: 0 0 auto;
       margin-top: 3px;
-      padding: 7px 10px;
-      border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-      border-radius: 999px;
+      padding: 7px 0;
+      border: 0;
+      border-radius: 0;
       color: var(--accent);
-      background: var(--accent-soft);
+      background: transparent;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       white-space: nowrap;
     }
     .local-badge svg { width: 15px; height: 15px; display: block; }
@@ -488,6 +490,8 @@
 .input-source-button svg{width:19px;height:19px;flex:0 0 auto}
 .input-source-button span{min-width:0;font-size:11px;font-weight:750;line-height:1.35}
 @media(max-width:340px){.input-source-grid{grid-template-columns:1fr}}
+.file-fallback-button{display:none}
+@media (max-width:767px),(pointer:coarse) and (max-height:600px){.file-fallback-button{display:block;width:100%;margin-top:8px;padding:10px;border:0;background:transparent;color:var(--accent);font-size:13px;font-weight:650;min-height:44px;cursor:pointer}}
 .control-group{margin:12px 0;padding:11px;border:1px solid var(--line);border-radius:11px;background:#fbfcfa}
 .control-group-head{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-bottom:8px}.control-group-head h4{margin:0;font-size:12px}.control-group-head p{margin:3px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
 .control-group-label{display:block;margin-bottom:7px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.02em}
@@ -746,6 +750,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
             <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden aria-label="Choose PNG, JPEG or WebP image">
             <input id="pdfInput" type="file" accept="application/pdf,.pdf" hidden aria-label="Choose PDF file">
             <input id="projectInput" type="file" accept=".graphdigitizer.json,application/json" hidden aria-label="Choose Graph Digitizer project file">
+            <input id="fileFallbackInput" type="file" hidden aria-label="Choose from files">
             <div class="control-group">
               <span class="control-group-label" data-i18n="inputActionsLabel">入力</span>
               <div class="input-source-grid">
@@ -754,6 +759,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
                 <button type="button" id="projectOpenButton" class="button input-source-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><path d="M3 7V5h6l2 2"/></svg><span data-i18n="openProject">作業ファイルを開く</span></button>
                 <button type="button" id="sampleButton" class="button input-source-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16"/><path d="m7 15 3-4 3 2 4-6"/></svg><span data-i18n="sample">サンプルで試す</span></button>
               </div>
+              <button type="button" id="fileFallbackButton" class="file-fallback-button" data-i18n="fileFallback">ファイルから選択</button>
             </div>
             <div class="pdf-card project-card" id="projectCard">
               <h4 data-i18n="projectTitle">作業ファイル</h4><p data-i18n="projectLead">画像・軸設定・系列・抽出点を1つのファイルに保存して、あとから再開できます。</p>
@@ -917,7 +923,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
 
   </main>
 
-  <footer><span id="footerName">Graph Digitizer</span> · MIT License · <span data-i18n="footer">グラフ画像と数値は端末内で処理します</span></footer>
+  <footer><span id="footerName">Graph Digitizer</span> · MIT License · <span data-i18n="footer">グラフの読み取りはブラウザー内で完結</span></footer>
   <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default">
     <span class="app-toast-message" id="appToastMessage"></span>
     <button class="app-toast-action" id="appToastAction" type="button" hidden></button>
@@ -943,8 +949,8 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
   <dialog id="helpDialog" aria-labelledby="helpTitle">
     <div class="dialog-header">
       <h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2>
-      <button class="icon-button" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+      <button class="dialog-close" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </button>
     </div>
     <div class="dialog-body">
@@ -1249,7 +1255,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           workspaceTitle: 'XYグラフの数値化', workspaceBody: '画像 → 軸の設定 → 点の抽出 → CSV保存',
           tabImage:'画像', tabAxis:'軸', tabExtract:'抽出', tabResults:'結果',
           previewTitle:'グラフのプレビュー', emptyTitle:'ここへファイルをドロップ',emptyBody:'画像・PDF・作業ファイルをドロップできます。画像は貼り付けにも対応',
-          emptyHint:'ファイルは外部に送信されません。',chooseImage:'画像を選択',choosePdf:'PDFを選択',imageTitle:'1. 画像 / PDFを追加',
+          emptyHint:'ファイルは外部に送信されません。',chooseImage:'画像を選択',fileFallback:'ファイルから選択',choosePdf:'PDFを選択',imageTitle:'1. 画像 / PDFを追加',
           imageHint:'画像またはPDFのページからXYグラフを読み込みます。', sample:'サンプルで試す',
           projectTitle:'作業ファイル',projectLead:'画像・軸設定・系列・抽出点を1つのファイルに保存して、あとから再開できます。',openProject:'作業ファイルを開く',saveProject:'作業ファイルを保存',
           projectEmpty:'作業ファイルを開くと、保存した続きから再開できます。',projectUnsaved:'未保存の変更があります。',projectSaved:'保存済み：{filename}',projectLoading:'作業ファイルを確認しています…',
@@ -1282,7 +1288,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           helpOffline:'配布用HTMLはオフラインで開けます。対応ブラウザー：Chrome / Edge。',
 
           buildInfo:'ビルド情報',appVersion:'アプリのバージョン',builtAt:'ビルド日時',dependencies:'内包ライブラリ',
-          footer:'グラフ画像・PDF・数値は端末内で処理します',disclaimerTitle:'抽出値について',disclaimerBody:'画像から推定した値です。元の測定精度は保証できません。',
+          footer:'グラフの読み取りはブラウザー内で完結',disclaimerTitle:'抽出値について',disclaimerBody:'画像から推定した値です。元の測定精度は保証できません。',
           confirmTitle:'変更を確認', confirmAction:'続ける',cancel:'キャンセル',
           resetTitle:'作業をリセットしますか？',resetBody:'画像、校正点、抽出点をすべて破棄します。この操作は元に戻せません。未保存なら、必要に応じて先に作業ファイルを保存してください。',
           replaceTitle:'画像を置き換えますか？',replaceBody:'現在の画像、軸の設定、抽出点が失われます。未保存なら、必要に応じて先に作業ファイルを保存してください。',
@@ -1340,7 +1346,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           workspaceTitle:'Digitize an XY graph',workspaceBody:'Image → calibrate axes → pick points → save CSV',
           tabImage:'Image',tabAxis:'Axes',tabExtract:'Extract',tabResults:'Results',
           previewTitle:'Graph preview',emptyTitle:'Drop a file here',emptyBody:'Drop an image, PDF, or project file. Images can also be pasted.',
-          emptyHint:'Your file is not sent to a server.',chooseImage:'Choose image',choosePdf:'Choose PDF',imageTitle:'1. Add image / PDF',
+          emptyHint:'Your file is not sent to a server.',chooseImage:'Choose image',fileFallback:'Choose from files',choosePdf:'Choose PDF',imageTitle:'1. Add image / PDF',
           imageHint:'Load an XY graph from an image or a PDF page.',sample:'Try sample',
           projectTitle:'Project file',projectLead:'Save the working image, calibration, series, and extracted points in one file so you can resume later.',openProject:'Open project file',saveProject:'Save project file',
           projectEmpty:'Open a project file to resume saved work.',projectUnsaved:'You have unsaved changes.',projectSaved:'Saved: {filename}',projectLoading:'Checking project file…',
@@ -1373,7 +1379,7 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
           helpOffline:'The standalone HTML can be opened offline. Target browsers: Chrome / Edge.',
 
           buildInfo:'Build information',appVersion:'App version',builtAt:'Built at',dependencies:'Embedded libraries',
-          footer:'Your graph image, PDF, and values stay on your device',disclaimerTitle:'About extracted values',disclaimerBody:'Values are estimates based on an image; original measurement accuracy cannot be guaranteed.',
+          footer:'Graph digitizing stays in the browser',disclaimerTitle:'About extracted values',disclaimerBody:'Values are estimates based on an image; original measurement accuracy cannot be guaranteed.',
           confirmTitle:'Confirm change',confirmAction:'Continue',cancel:'Cancel',
           resetTitle:'Reset this work?',resetBody:'The image, calibration and all points will be lost. This cannot be undone. Save a project file first if you need to keep unsaved work.',
           replaceTitle:'Replace the current image?',replaceBody:'This discards your image, calibration, and extracted points. Save a project file first if you need to keep unsaved work.',
@@ -2920,10 +2926,12 @@ button:focus-visible,.axis-field input:focus-visible,.field input:focus-visible 
       helpDialog.addEventListener('close',()=>{
         if(helpRestoreFocus instanceof HTMLElement&&helpRestoreFocus.isConnected)helpRestoreFocus.focus({preventScroll:true});
       });
-      const imageInput=$('#imageInput'),pdfInput=$('#pdfInput'),projectInput=$('#projectInput');
+      const imageInput=$('#imageInput'),pdfInput=$('#pdfInput'),projectInput=$('#projectInput'),fileFallbackInput=$('#fileFallbackInput');
       const pickImage=()=>imageInput.click(),pickPdf=()=>pdfInput.click(),pickProject=()=>projectInput.click();
       const importAnyFile=async file=>{if(!file)return;if((file.name||'').toLowerCase().endsWith(PROJECT_EXTENSION))await loadProjectFile(file);else if(file.type==='application/pdf'||/\.pdf$/i.test(file.name||''))await openPdfFile(file);else await importFile(file);};
       $('#chooseImageButton').addEventListener('click',pickImage);
+      $('#fileFallbackButton').addEventListener('click',()=>fileFallbackInput.click());
+      fileFallbackInput.addEventListener('change',async()=>{const file=fileFallbackInput.files?.[0];fileFallbackInput.value='';if(file)await importAnyFile(file);});
       $('#choosePdfButton').addEventListener('click',pickPdf);
       $('#projectOpenButton').addEventListener('click',pickProject);
       for(const id of ['projectSaveButton','projectSaveExtractButton','projectSaveResultButton'])$(`#${id}`).addEventListener('click',saveProjectFile);
